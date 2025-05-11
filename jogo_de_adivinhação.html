@@ -1,57 +1,65 @@
-<!DOCTYPE html>
-<meta charset="UTF-8">
-<input/>
-<button>Compare com o meu segredo</button>
-    <script>
-        function sorteia() {
-            return Math.round(Math.random() * 10);
-        }
-        function sorteiaNumeros(quantidade) {
+html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo de Adivinhação</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+      padding-top: 50px;
+    }
+    #game {
+      background-color: #fff;
+      padding: 30px;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      font-size: 16px;
+    }
+    button {
+      padding: 5px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <h1>Jogo de Adivinhação</h1>
+    <p>Adivinhe um número entre 1 e 100</p>
+    <input type="number" id="guess" min="1" max="100">
+    <button onclick="checkGuess()">Adivinhar</button>
+    <p id="message"></p>
+  </div>
 
-            let segredos = [];
-            let numero = 1;
+  <script>
+    const numberToGuess = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
 
-            while(numero <= quantidade) {
-                let numeroAleatorio = sorteia();
-                
-                if (numeroAleatorio !== 0) {
-                    let achou = false;
-                    for(let posicao = 0; posicao < segredos.length; posicao++) {
-                        if(segredos[posicao] == numeroAleatorio) {
-                            achou = true;
-                            break;
-                        }
-                    }
-                        if (achou == false) {
-                            segredos.push(numeroAleatorio);
-                            numero++;
-                        }
-                }        
-            }
-            return segredos;
-        }
-        let segredos = sorteiaNumeros(3);
-        
-        console.log(segredos);
-        
-        let input = document.querySelector("input");
-        input.focus();
+    function checkGuess() {
+      const guess = parseInt(document.getElementById('guess').value);
+      const message = document.getElementById('message');
+      attempts++;
 
-        function verifica() {
-            let achou = false;
-            for(let posicao = 0; posicao < segredos.length; posicao++) {
-                if(input.value == segredos[posicao]) {
-                    alert("Você ACERTOU!");
-                    achou = true;
-                    break;
-                }
-            }
-        if(achou == false) {
-            alert("Você ERROU!");
-        }
-        input.value = "";
-        input.focus();
-        }
-        let button = document.querySelector("button");
-        button.onclick = verifica;
-    </script>
+      if (isNaN(guess) || guess < 1 || guess > 100) {
+        message.textContent = "Por favor, digite um número válido entre 1 e 100.";
+      } else if (guess < numberToGuess) {
+        message.textContent = "Tente um número maior.";
+      } else if (guess > numberToGuess) {
+        message.textContent = "Tente um número menor.";
+      } else {
+        message.textContent = `Parabéns! Você acertou em ${attempts} tentativas.`;
+      }
+    }
+  </script>
+</body>
+</html>
